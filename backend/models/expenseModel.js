@@ -1,9 +1,39 @@
 import mongoose from 'mongoose';
 
+const fundSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    amount: { type: Number, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+const investmentSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    amount: { type: Number, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
 const expenseSchema = mongoose.Schema(
   {
-    fund: String,
-    investment: String,
+    fund: [fundSchema],
+    investment: [investmentSchema],
     amount: Number,
     expense: Number,
     fees: Number,
@@ -12,7 +42,7 @@ const expenseSchema = mongoose.Schema(
     shareprice: Number,
     currentestimatedvalue: Number,
     user: {
-      type: mongoose.Schema.Type.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true
     }
