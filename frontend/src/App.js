@@ -1,21 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import Header from './components/Header.js';
-import Footer from './components/Footer.js';
-import LoginScreen from './screens/LoginScreen.js';
-import RegisterScreen from './screens/RegisterScreen.js';
-import ProfileScreen from './screens/ProfileScreen.js';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
 
 const App = () => {
   return (
     <Router>
       <Header />
-      <main className='py-3'>
+      <main className='py-5'>
         <Container>
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
+          <Route path='/admin/userlist' component={UserListScreen} />
+          <Route path='/admin/user/:id/edit' component={UserEditScreen} />
         </Container>
       </main>
       <Footer />
