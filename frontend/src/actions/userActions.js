@@ -69,7 +69,7 @@ export const logout = () => dispatch => {
   document.location.href = '/login';
 };
 
-// Register
+// Register a User
 export const register = (name, email, password) => async dispatch => {
   try {
     dispatch({

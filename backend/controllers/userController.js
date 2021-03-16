@@ -73,7 +73,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       address: user.address,
       ssn: user.ssn,
-      //image: user.image,
+      image: user.image,
       isAdmin: user.isAdmin
     });
   } else {
@@ -94,7 +94,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.address = req.body.address || user.address;
     user.ssn = req.body.ssn || user.ssn;
-    //user.image = req.body.image || user.image;
+    user.image = req.body.image || user.image;
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -107,7 +107,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       address: updatedUser.address,
       ssn: updatedUser.ssn,
-      //image: updatedUser.image,
+      image: updatedUser.image,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id)
     });
@@ -169,7 +169,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.address = req.body.address || user.address;
     user.ssn = req.body.ssn || user.ssn;
-    //user.image = req.body.image || user.image;
+    user.image = req.body.image || user.image;
     user.isAdmin = req.body.isAdmin;
 
     const updatedUser = await user.save();
@@ -180,13 +180,32 @@ const updateUser = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       address: updatedUser.address,
       ssn: updatedUser.ssn,
-      //image: updatedUser.image,
+      image: updatedUser.image,
       isAdmin: updatedUser.isAdmin
     });
   } else {
     res.status(404);
     throw new Error('User not found');
   }
+});
+
+// @desc    Create a user
+// @route   POST /api/users/profile
+// @access  Private/Admin
+
+const createUser = asyncHandler(async (req, res) => {
+  const user = new User({
+    name: 'Sample name',
+    email: 'sample@example.com',
+    password: '123456',
+    address: '',
+    ssn: '',
+    image: '/images/sample.jpg',
+    isAdmin: false
+  });
+
+  const createdUser = await user.save();
+  res.status(201).json(createdUser);
 });
 
 export {
@@ -197,5 +216,6 @@ export {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  createUser
 };

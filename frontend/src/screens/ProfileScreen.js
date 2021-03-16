@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +13,8 @@ const ProfileScreen = ({ history }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [address, setAddress] = useState('');
   const [ssn, setSSN] = useState('');
+  const [image, setImage] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
@@ -36,9 +39,33 @@ const ProfileScreen = ({ history }) => {
         setEmail(user.email);
         setAddress(user.address);
         setSSN(user.ssn);
+        setImage(user.image);
       }
     }
   }, [dispatch, history, userInfo, user]);
+
+  const uploadFileHandler = async e => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
 
   const submitHandler = e => {
     e.preventDefault();
@@ -46,7 +73,15 @@ const ProfileScreen = ({ history }) => {
       setMessage('Passwords do not match');
     } else {
       dispatch(
-        updateUserProfile({ id: user._id, name, email, address, ssn, password })
+        updateUserProfile({
+          id: user._id,
+          name,
+          email,
+          address,
+          ssn,
+          password,
+          image
+        })
       );
     }
   };
@@ -118,6 +153,23 @@ const ProfileScreen = ({ history }) => {
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
             ></Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId='image'>
+            <Form.Label>Image</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter image url'
+              value={image}
+              onChange={e => setImage(e.target.value)}
+            ></Form.Control>
+            <Form.File
+              id='image-file'
+              label='Choose File'
+              custom
+              onChange={uploadFileHandler}
+            ></Form.File>
+            {uploading && <Loader />}
           </Form.Group>
 
           <Button type='submit' variant='primary'>
