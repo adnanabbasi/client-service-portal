@@ -122,8 +122,16 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
-  res.json(users);
+  const pageSize = 5;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const count = await User.countDocuments();
+
+  const users = await User.find({})
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ users, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Delete user
@@ -190,7 +198,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create a user
-// @route   POST /api/users/profile
+// @route   POST /api/users/createuser
 // @access  Private/Admin
 
 const createUser = asyncHandler(async (req, res) => {
@@ -206,6 +214,40 @@ const createUser = asyncHandler(async (req, res) => {
 
   const createdUser = await user.save();
   res.status(201).json(createdUser);
+
+  // const { name, email, password, address, ssn, image, isAdmin } = req.body;
+
+  // const userExists = await User.findOne({ email });
+
+  // if (userExists) {
+  //   res.status(400);
+  //   throw new Error('User already exists');
+  // }
+
+  // const user = await User.create({
+  //   name,
+  //   email,
+  //   password,
+  //   address,
+  //   ssn,
+  //   image,
+  //   isAdmin
+  // });
+
+  // if (user) {
+  //   res.status(201).json({
+  //     _id: user._id,
+  //     name: user.name,
+  //     email: user.email,
+  //     address: user.address,
+  //     ssn: user.ssn,
+  //     image: user.image,
+  //     isAdmin: user.isAdmin
+  //   });
+  // } else {
+  //   res.status(400);
+  //   throw new Error('Invalid user data');
+  // }
 });
 
 export {

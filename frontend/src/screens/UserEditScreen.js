@@ -14,6 +14,8 @@ const UserEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [ssn, setSSN] = useState('');
   const [image, setImage] = useState('');
   const [uploading, setUploading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -40,6 +42,8 @@ const UserEditScreen = ({ match, history }) => {
       } else {
         setName(user.name);
         setEmail(user.email);
+        setAddress(user.address);
+        setSSN(user.ssn);
         setImage(user.image);
         setIsAdmin(user.isAdmin);
       }
@@ -106,6 +110,26 @@ const UserEditScreen = ({ match, history }) => {
                 placeholder='Enter email'
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='address'>
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type='address'
+                placeholder='Enter address'
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='ssn'>
+              <Form.Label>SSN</Form.Label>
+              <Form.Control
+                type='ssn'
+                placeholder='Enter ssn'
+                value={ssn}
+                onChange={e => setSSN(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

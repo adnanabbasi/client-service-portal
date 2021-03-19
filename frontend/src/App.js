@@ -18,7 +18,12 @@ const App = () => {
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
-          <Route path='/admin/userlist' component={UserListScreen} />
+          <Route path='/admin/userlist' component={UserListScreen} exact />
+          <Route
+            path='/admin/userlist/:pageNumber'
+            component={UserListScreen}
+            exact
+          />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
         </Container>
       </main>
